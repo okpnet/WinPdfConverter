@@ -10,6 +10,8 @@ namespace PdfConverer.PdfProcessing
 
         SizeF Size { get; }
 
+        string ImagePath { get; }
+
         Task<Bitmap?> GetImageAsync();
     }
 }
