@@ -9,6 +9,6 @@ namespace PdfConverer.PdfProcessing
 {
     public interface IPdfFile : IPdf
     {
-        string? FilePath { get; }
+        string? BaseFilePath { get; }
     }
 }

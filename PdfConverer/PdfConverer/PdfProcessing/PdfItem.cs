@@ -26,7 +26,7 @@ namespace PdfConverer.PdfProcessing
         /// <summary>
         /// 元のファイルパス
         /// </summary>
-        public string? FilePath { get; }
+        public string? BaseFilePath => _baseFilePath;
         /// <summary>
         /// PDFドキュメントのページ数
         /// </summary>
@@ -57,6 +57,7 @@ namespace PdfConverer.PdfProcessing
         public PdfItem(string filePath, string tmpDirPath)
         {
             ImageDirPath = tmpDirPath;
+            _baseFilePath = filePath;
             _filePath = Path.Combine(ImageDirPath,$"{Guid.NewGuid()}.pdf");
             File.Copy(filePath, _filePath, true);
         }
