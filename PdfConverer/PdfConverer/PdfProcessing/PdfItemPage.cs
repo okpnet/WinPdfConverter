@@ -56,8 +56,10 @@ namespace PdfConverer.PdfProcessing
 
         public async Task SavePdfAsync(string saveFilePath)
         {
-            var image = new Bitmap(ImagePath);
+            using var stream = new FileStream(ImagePath, FileMode.Open);
+            var image = new Bitmap(stream);
             await image.SaveFitImageToPdfAsync(saveFilePath);
+            image.Dispose();
         }
 
         public Task<Bitmap?> GetImageAsync()
@@ -70,7 +72,12 @@ namespace PdfConverer.PdfProcessing
                     {
                         return null;
                     }
-                    return new Bitmap(ImagePath);
+                    using var stream = new FileStream(ImagePath, FileMode.Open);
+                    var image= new Bitmap(stream);
+                    var resultBitmap=(Bitmap)image.Clone();
+                    image.Dispose();
+                    stream.Close();
+                    return resultBitmap;
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +91,20 @@ namespace PdfConverer.PdfProcessing
         {
             if (System.IO.File.Exists(ImagePath))
             {
-                System.IO.File.Delete(ImagePath);
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        Task.Delay(100).Wait();
+                        //GC.Collect();
+                        //GC.WaitForPendingFinalizers();
+                        System.IO.File.Delete(ImagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"EXCEPTION FILE DELETE RETRY {ImagePath}:{ex.Message}");
+                    }
+                }
             }
         }
     }

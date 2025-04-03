@@ -58,13 +58,14 @@ namespace PdfConverer.PdfProcessing
         {
             ImageDirPath = tmpDirPath;
             _baseFilePath = filePath;
+
             _filePath = Path.Combine(ImageDirPath,$"{Guid.NewGuid()}.pdf");
             File.Copy(filePath, _filePath, true);
         }
 
         public async Task InitilizePageAsync(IProgress<(int, int)>? progress = null)
         {
-            if (_pdfItems.Any())
+            if (_pdfItems.Any() )
             {
                 return;
             }

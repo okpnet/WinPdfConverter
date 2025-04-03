@@ -18,22 +18,33 @@ namespace PdfConverer.Helper
         /// <param name="dpi">300DPIで保存した画像は100が適切</param>
         public static void SaveFitImageToPdf(this Image image, string filename,float dpi=100.0f)
         {
+            if (System.IO.File.Exists(filename))
+            {
+                return;
+            }
             imageLock.EnterReadLock();
             var width=image.Width.ChangeSize(dpi);
             var height=image.Height.ChangeSize(dpi);
             using var memstream = new MemoryStream();
             image.Save(memstream, ImageFormat.Bmp);
             imageLock.ExitReadLock();
-
-            QuestSetting();
-            Document.Create(container =>
+            try
             {
-                container.Page(page =>
+                QuestSetting();
+                Document.Create(container =>
                 {
-                    page.Size(width, height);
-                    page.Content().Image(memstream.ToArray());
-                });
-            }).GeneratePdf(filename);
+                    container.Page(page =>
+                    {
+                        page.Size(width, height);
+                        page.Content().Image(memstream.ToArray());
+                    });
+                }).GeneratePdf(filename);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                return;
+            }
         }
 
         public static async Task SaveFitImageToPdfAsync(this Image image, string filename, float dpi = 100.0f)

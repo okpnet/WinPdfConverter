@@ -13,5 +13,7 @@ namespace PdfConverer.PdfProcessing
         string ImagePath { get; }
 
         Task<Bitmap?> GetImageAsync();
+
+        Task SavePdfAsync(string saveFilePath);
     }
 }
