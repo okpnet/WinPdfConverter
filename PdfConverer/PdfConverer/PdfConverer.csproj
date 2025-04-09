@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>pdfconlib</AssemblyName>
+    <Company>hayato takahashi</Company>
   </PropertyGroup>
 
   <ItemGroup>
